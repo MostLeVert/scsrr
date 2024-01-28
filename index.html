@@ -56,9 +56,20 @@
         font-size: 1rem;
         cursor: pointer;
     }
+    code {
+        font-family: monospace;
+        border: .5px solid black;
+        padding: 5px;
+        border-radius: 5px;
+    }
+    main {
+        margin-top: 2rem;
+    }
 </style>
 <body>
-    <h1>Search Certain Subreddits On Reddit Reliably</h1>  
+    <h1>Search Certain Subreddits On Reddit Reliably</h1>
+    <p>Note: You really should just use a search pattern like <code>somerandomsearch site:reddit.com/r/somerandomsubreddit</code> with your favorite search engine</p>
+    <p>But if you really want to use this, go ahead</p>
     <main>
         <form id="main-form" autocomplete="off">
             <label for="search">Search for </label>
