@@ -29,7 +29,6 @@
         position: absolute;
         border: 1px solid black;
         width: 300px;
-        height: 500px;
         overflow: hidden;
         border-radius: 15px;
         padding: 20px;
@@ -43,20 +42,33 @@
         padding: 10px;
         margin: 5px 0px 5px;
     }
+    .result:hover {
+        background: #0079d3;
+        color: white;
+        cursor: pointer;
+    }
+    input[type="submit"] {
+        background: #0079d3;
+        color: white;
+        border: none;
+        border-radius: 1rem;
+        padding: 1rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
 </style>
 <body>
     <h1>Search Certain Subreddits On Reddit Reliably</h1>  
     <main>
-        <form>
+        <form id="main-form">
             <label for="search">Search for </label>
             <input type="text" id="search" name="search" placeholder="...">
-            <!-- <label for="subreddit">Subreddit:</label> -->
             in
             <input type="text" id="subreddit" name="subreddit" placeholder="Subreddit">
             and
             <input type="submit" value="Go">
         </form>
-        <div id="results"></div>
+        <div style="display:none;"id="results"></div>
     </main>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
