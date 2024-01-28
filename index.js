@@ -3,13 +3,6 @@ const results = document.getElementById("results");
 
 subredditInput.addEventListener("input", () => search(subredditInput.value));
 subredditInput.addEventListener("focus", () => search(subredditInput.value));
-subredditInput.addEventListener("blur", () => {
-    console.log("unfocus");
-    // results.style.display = "none";
-    setTimeout(() => {
-        results.style.display = 'none';
-    }, 500)
-});
 
 let subredditData;
 
@@ -21,7 +14,11 @@ fetch("subreddits.txt")
     .catch((error) => {
         console.error("Error:", error);
     });
-
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && results.style.display === "block") {
+        results.style.display = "none";
+    }
+})
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("main-form");
     form.addEventListener("submit", function (event) {
@@ -29,6 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData(form);
         const query = formData.get("search");
         const subreddit = formData.get("subreddit");
+        if (!query) {
+            const url = `https://www.reddit.com/r/${subreddit}/`;
+            window.open(url, "_blank");
+        }
         const url = `https://www.reddit.com/r/${subreddit}/search/?q=${query}&restrict_sr=1`;
         window.open(url, "_blank");
     });
@@ -41,17 +42,23 @@ function search(searchQuery) {
     results.innerHTML = "";
     results.style.display = "block";
     results.innerHTML = matchingLines
-        .slice(0, 10)
+        .slice(0, 5)
         .map(
             (line, index) =>
-                `<div id="line-${index}" class="result">${line}</div>`
+                `<div tabindex="0" id="line-${index}" class="result">${line}</div>`
         )
         .join("");
     const resultElements = document.querySelectorAll(".result");
     resultElements.forEach((element) => {
         element.addEventListener("click", () => {
             subredditInput.value = element.innerHTML;
-            console.log("element.innerHTML", element.innerHTML);
+                results.style.display = "none";
         });
+        element.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                subredditInput.value = element.innerHTML;
+                results.style.display = "none";
+            }
+        })
     });
 }
