@@ -2,7 +2,14 @@ const subredditInput = document.getElementById("subreddit");
 const results = document.getElementById("results");
 
 subredditInput.addEventListener("input", () => search(subredditInput.value));
-subredditInput.addEventListener("blur", () => results.style.display = "none");
+subredditInput.addEventListener("focus", () => search(subredditInput.value));
+subredditInput.addEventListener("blur", () => {
+    console.log("unfocus");
+    // results.style.display = "none";
+    setTimeout(() => {
+        results.style.display = 'none';
+    }, 500)
+});
 
 let subredditData;
 
@@ -18,24 +25,20 @@ fetch("subreddits.txt")
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("main-form");
     form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault();
         const formData = new FormData(form);
-        formData.forEach((value, key) => {
-            console.log(key, value);
-        });
+        const query = formData.get("search");
+        const subreddit = formData.get("subreddit");
+        const url = `https://www.reddit.com/r/${subreddit}/search/?q=${query}&restrict_sr=1`;
+        window.open(url, "_blank");
     });
 });
 
 function search(searchQuery) {
-    if (!subredditData) {
-        return;
-    }
+    console.log("searchQuery", searchQuery);
     const lines = subredditData.split("\n");
     const matchingLines = lines.filter((line) => line.includes(searchQuery));
-    if (matchingLines.length === 0) {
-        results.style.display = "none";
-        return;
-    }
+    results.innerHTML = "";
     results.style.display = "block";
     results.innerHTML = matchingLines
         .slice(0, 10)
@@ -44,13 +47,11 @@ function search(searchQuery) {
                 `<div id="line-${index}" class="result">${line}</div>`
         )
         .join("");
-
     const resultElements = document.querySelectorAll(".result");
     resultElements.forEach((element) => {
         element.addEventListener("click", () => {
-            const value = element.innerHTML;
-            subredditInput.value = value;
-            results.style.display = "none";
+            subredditInput.value = element.innerHTML;
+            console.log("element.innerHTML", element.innerHTML);
         });
     });
 }
